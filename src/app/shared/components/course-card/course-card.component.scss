@@ -31,4 +31,15 @@
       margin-top: 16px;
     }
   }
+
+  &__info-actions {
+    display: flex;
+    gap: 0.2rem;
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 0.2rem;
+    align-items: center;
+  }
 }
