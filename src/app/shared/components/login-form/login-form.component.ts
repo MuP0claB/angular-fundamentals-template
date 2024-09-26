@@ -1,33 +1,20 @@
-import { ChangeDetectionStrategy, Component, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { faIcons } from '@app/shared/common/fa-icons';
 
 @Component({
-  selector: 'app-login-form',
-  templateUrl: './login-form.component.html',
-  styleUrls: ['./login-form.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-login-form',
+    templateUrl: './login-form.component.html',
+    styleUrls: ['./login-form.component.scss'],
 })
 export class LoginFormComponent {
-  @ViewChild('loginForm') public loginForm!: NgForm;
-  formFields = {
-    email: 'email',
-    password: 'password'
-  }
+    @ViewChild('loginForm') public loginForm!: NgForm;
+    isFormSubmmited!: boolean;
 
-  emailControl: string = "";
-  passwordControl: string = "";
+    eyeIcon = faIcons.eye;
+    eyeSlashIcon = faIcons.eyeSlash;
 
-  onSubmit(): void {
-    Object.keys(this.loginForm.controls).forEach(controlName => {
-      const control = this.loginForm.controls[controlName];
-      control.markAsTouched();
-    });
-
-    if (this.loginForm.valid) {
-      console.log('Email:', this.emailControl, 'Password:', this.passwordControl);
-    } else {
-      console.log('Form is invalid');
+    onSubmit(): void {
+        this.isFormSubmmited = true;
     }
-  }
-
 }

@@ -1,18 +1,15 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-search',
-  templateUrl: './search.component.html',
-  styleUrls: ['./search.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-search',
+    templateUrl: './search.component.html',
+    styleUrls: ['./search.component.scss'],
 })
 export class SearchComponent {
-  @Input() placeholder?: string = 'Input String';
-  @Output() search = new EventEmitter<string>();
-  
-  searchTerm: string = '';
+    @Input() placeholder!: string;
+    @Output() search = new EventEmitter<string>();
 
-  onSearch() {
-    this.search.emit(this.searchTerm);
-  }
+    onSearch(value: string) {
+        this.search.emit(value);
+    }
 }

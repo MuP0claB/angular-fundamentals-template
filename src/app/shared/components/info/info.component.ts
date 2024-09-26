@@ -1,13 +1,11 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-info',
-  templateUrl: './info.component.html',
-  styleUrls: ['./info.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-info',
+    templateUrl: './info.component.html',
+    styleUrls: ['./info.component.scss'],
 })
 export class InfoComponent {
-  @Input() title!: string;
-  @Input() text?: string;
-
+    @Input() title!: string;
+    @Input() text?: string | undefined;
 }
