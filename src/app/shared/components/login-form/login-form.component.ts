@@ -1,38 +1,33 @@
-// src/app/auth/login-form/login-form.component.ts
-
-import { Component, ViewChild } from "@angular/core";
-import { NgForm } from "@angular/forms";
+import { ChangeDetectionStrategy, Component, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 @Component({
-    selector: "app-login-form",
-    templateUrl: "./login-form.component.html",
-    styleUrls: ["./login-form.component.scss"],
+  selector: 'app-login-form',
+  templateUrl: './login-form.component.html',
+  styleUrls: ['./login-form.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginFormComponent {
-    @ViewChild("loginForm") public loginForm!: NgForm;
-    public isSubmitted: boolean = false;
+  @ViewChild('loginForm') public loginForm!: NgForm;
+  formFields = {
+    email: 'email',
+    password: 'password'
+  }
 
-    /**
-     * Handles the form submission.
-     * Checks if the form is valid and performs login logic.
-     */
-    onSubmit(): void {
-        this.isSubmitted = true;
+  emailControl: string = "";
+  passwordControl: string = "";
 
-        if (this.loginForm.valid) {
-            const email = this.loginForm.value.email;
-            const password = this.loginForm.value.password;
+  onSubmit(): void {
+    Object.keys(this.loginForm.controls).forEach(controlName => {
+      const control = this.loginForm.controls[controlName];
+      control.markAsTouched();
+    });
 
-            // TODO: Implement actual login logic here (e.g., call an authentication service)
-            console.log("Login successful!");
-            console.log("Email:", email);
-            console.log("Password:", password);
-
-            // Optionally, reset the form after successful submission
-            this.loginForm.resetForm();
-            this.isSubmitted = false;
-        } else {
-            console.log("Form is invalid");
-        }
+    if (this.loginForm.valid) {
+      console.log('Email:', this.emailControl, 'Password:', this.passwordControl);
+    } else {
+      console.log('Form is invalid');
     }
+  }
+
 }

@@ -1,26 +1,27 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { DatePipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-    selector: "app-course-card",
-    templateUrl: "./course-card.component.html",
-    styleUrls: ["./course-card.component.scss"],
+  selector: 'app-course-card',
+  templateUrl: './course-card.component.html',
+  styleUrls: ['./course-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DatePipe],
 })
 export class CourseCardComponent {
-    // Input properties for course data
-    @Input() title!: string;
-    @Input() description!: string;
-    @Input() creationDate!: Date;
-    @Input() duration!: number;
-    @Input() authors!: string[];
+  @Input() title!: string;
+  @Input() description!: string;
+  @Input() creationDate!: Date;
+  @Input() duration!: number;
+  @Input() authors!: string[];
+  @Input() editable: boolean = false;
+  @Output() clickOnShow = new EventEmitter<void>();
 
-    // Input to determine if the course is editable
-    @Input() editable: boolean = true;
+  constructor(private datePipe: DatePipe){}
 
-    // Output event for show course action
-    @Output() clickOnShow = new EventEmitter<void>();
+  onShowCourse(): void{
+    this.clickOnShow.emit();
+  }
 
-    // Function to emit 'show course' event
-    onShowCourse() {
-        this.clickOnShow.emit();
-    }
+  
 }
