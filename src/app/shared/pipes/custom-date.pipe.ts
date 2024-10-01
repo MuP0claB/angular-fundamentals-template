@@ -1,19 +1,16 @@
-import { Pipe } from '@angular/core';
+import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
-    name: 'customDate',
+  name: "customDate",
 })
-export class CustomDatePipe {
-    transform(value: Date): string {
-        if (!value) {
-            return '';
-        }
+export class CustomDatePipe implements PipeTransform {
+  transform(value: string|Date): string {
+    const date = new Date(value);
 
-        const date = new Date(value);
-        const day = ('0' + date.getDate()).slice(-2);
-        const month = ('0' + (date.getMonth() + 1)).slice(-2);
-        const year = date.getFullYear();
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
 
-        return `${day}.${month}.${year}`;
-    }
+    return `${day}.${month}.${year}`;
+  }
 }

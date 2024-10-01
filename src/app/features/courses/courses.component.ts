@@ -1,40 +1,21 @@
-import { Component } from '@angular/core';
-
-import { mockedCoursesList } from '@app/shared/mocks/mock';
-import { mockedAuthorsList } from '@app/shared/mocks/mock';
-
-import Course from '@app/core/interfaces/course';
-import Author from '@app/core/interfaces/author';
+import { Component } from "@angular/core";
+import { Router } from "@angular/router";
 
 @Component({
-    selector: 'app-courses',
-    templateUrl: './courses.component.html',
+  selector: "app-courses",
+  templateUrl: "./courses.component.html",
+  styleUrls: ["./courses.component.scss"],
 })
 export class CoursesComponent {
-    courses: Course[] = mockedCoursesList;
-    authors: Author[] = mockedAuthorsList;
-    selectedCourse!: Course;
-    isShowButtonClicked!: boolean;
+  constructor(private router: Router) {}
 
-    getauthorName(authorIds: string[]): string[] {
-        return authorIds.map((id) => {
-            const author = this.authors.find((a) => a.id === id);
+  public onView(id:number):void{
 
-            return author ? author.name : 'Unknown author';
-        });
-    }
+  }
 
-    mappedCourses = this.courses.map((course) => ({
-        ...course,
-        authors: this.getauthorName(course.authors),
-    }));
-
-    onShowCourse(course: Course) {
-        this.selectedCourse = course;
-        this.isShowButtonClicked = true;
-    }
-
-    onBack() {
-        this.isShowButtonClicked = false;
-    }
+  
+  findCourse(query: string) {
+    console.log(query);
+    //add https request for the real search?
+  }
 }

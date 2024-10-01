@@ -1,30 +1,79 @@
-import { Injectable } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { User } from "@app/user.model";
+import { catchError, tap } from "rxjs/operators";
+import { BehaviorSubject, throwError, Observable } from "rxjs";
+import { SessionStorageService } from "./session-storage.service";
+
+interface AuthResponse {
+  successful: boolean;
+  result?: string;
+  errors?: string[];
+  user?: {};
+}
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: "root",
 })
 export class AuthService {
-    login(user: any) { // replace 'any' with the required interface
-        // Add your code here
-    }
+  private baseUrl = 'http://localhost:4000';
+  private isAuthorized$$ = new BehaviorSubject<boolean>(false);
+  public isAuthorized$ = this.isAuthorized$$.asObservable();
 
-    logout() {
-        // Add your code here
-    }
+  constructor(private http: HttpClient, private sessionStorage: SessionStorageService) {}
 
-    register(user: any) { // replace 'any' with the required interface
-        // Add your code here
-    }
+  login(user: User): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.baseUrl}/login`, user).pipe(
+      tap(response => {
+        if (response.successful) {
 
-    get isAuthorised() {
-        // Add your code here. Get isAuthorized$$ value
-    }
+          if(response.result) {
 
-    set isAuthorised(value: boolean) {
-        // Add your code here. Change isAuthorized$$ value
-    }
+            this.sessionStorage.setToken(response.result);
+          }
+          
+          this.isAuthorized$$.next(true);
+        }
+      }),
+      catchError(error => {
+        this.isAuthorized$$.next(false);
+        return throwError(error);
+      })
+    );
+  }
 
-    getLoginUrl() {
-        // Add your code here
-    }
+  logout(): void {
+    this.sessionStorage.deleteToken();
+    this.isAuthorized$$.next(false);
+  }
+
+  register(user: User): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.baseUrl}/registration`, user).pipe(
+      tap(response => {
+        if (response.successful) {
+          if(response.result) {
+
+            this.sessionStorage.setToken(response.result);
+          }
+          this.isAuthorized$$.next(true);
+        }
+      }),
+      catchError(error => {
+        this.isAuthorized$$.next(false);
+        return throwError(error);
+      })
+    );
+  }
+
+
+  get isAuthorised(): boolean {
+    return this.isAuthorized$$.value;
+}
+
+set isAuthorised(value: boolean) {
+    this.isAuthorized$$.next(value);
+}
+  getLoginUrl(): string {
+    return `${this.baseUrl}/login`;
+  }
 }
